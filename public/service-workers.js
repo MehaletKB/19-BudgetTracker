@@ -22,6 +22,7 @@ self.addEventListener("install", (event) => {
         .then((cache) => cache.addAll(FILES_TO_CACHE))
         .then(console.log("Pre-cache data success!"))
     )
+    // activate service worker as soon as installation is finished
     self.skipWaiting()
 });
 
