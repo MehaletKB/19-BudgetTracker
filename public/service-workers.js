@@ -1,3 +1,5 @@
+const CACHE_NAME = "static-cache-v2";
+const DATA_CACHE_NAME = "data-cache-v1";
 
 const FILES_TO_CACHE = [
     "/",
@@ -11,20 +13,19 @@ const FILES_TO_CACHE = [
     "styles.css"
 ];
 
-const CACHE_NAME = "static-cache-v2";
-const DATA_CACHE_NAME = "data-cache-v1";
-
-
+// install
 self.addEventListener("install", (event) => {
+    // pre cache all static assets
     event.waitUntil(
         caches
         .open(CACHE_NAME)
         .then((cache) => cache.addAll(FILES_TO_CACHE))
         .then(console.log("Pre-cache data success!"))
-        .then(self.skipWaiting())
     )
+    self.skipWaiting()
 });
 
+// activate
 self.addEventListener("activate", (event) => {
     event.waitUntil(
         caches
@@ -33,13 +34,14 @@ self.addEventListener("activate", (event) => {
             return Promise.all(
                 keyList.map((key) => {
                     if (key !== CACHE_NAME && key !== DATA_CACHE_NAME) {
-                        console.log("Old cache data remove success", key);
+                        console.log("Removing old cache data", key);
                         return caches.delete(key);
                     }
                 })
         );
     })
 );
+    // Tells new service worker to take over.
     self.clients.claim();
 });
 
@@ -52,12 +54,14 @@ self.addEventListener("fetch", (event) => {
             .then((cache) => {
                 return fetch(event.request)
                 .then((response) => {
+                    // If the response was good, clone it and store it in the cache.
                     if (response.status === 200) {
                         cache.put(event.request.url, response.clone());
                     }
                     return response;
                 })
                 .catch((error) => {
+                    // Network request failed, try to get it from the cache.
                     return cache.match(event.request);
                 });
             })
