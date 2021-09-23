@@ -12,7 +12,7 @@
 
 ## Description
 
-An web app used for tracking budget online and offline. Data added offline is cached to be added to database once device is online.
+A web app used for tracking budget online and offline. Data added offline is cached to be added to database once device is online.
 
 ## Installation
 
@@ -27,7 +27,7 @@ This app requires the following dependencies:
 
 ## Usage
 
-In the terminal, from the root folder, run with commands `npm i`, `npm run seed` and `npm start`. Then from a browser navigate to http://localhost:3000.
+In the terminal, from the root folder, run with commands `npm i` and `npm start`. Then from a browser navigate to http://localhost:3000.
 
 ## Screenshots
 
